@@ -1,0 +1,16 @@
+version: '2'
+services:
+  jhipsterdemo1-mongodb:
+    image: mongo:4.0.13
+    ports:
+      - '27017:27017'
+    command: mongos --configdb jhipsterdemo1-mongodb-config
+  jhipsterdemo1-mongodb-node:
+    build:
+      context: .
+      dockerfile: mongodb/MongoDB.Dockerfile
+    command: mongod --replSet rs1 --noprealloc --smallfiles
+  jhipsterdemo1-mongodb-config:
+    image: mongo:4.0.13
+    container_name: jhipsterdemo1-mongodb-config
+    command: mongod --noprealloc --smallfiles --configsvr --dbpath /data/db
